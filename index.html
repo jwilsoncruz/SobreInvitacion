@@ -93,6 +93,7 @@ body:not(.rev) .hero svg,body:not(.rev) .script,body:not(.rev) .xv,body:not(.rev
 @keyframes kb{from{transform:scale(1)}to{transform:scale(1.12)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div id="bgf"></div>
@@ -135,10 +136,10 @@ body:not(.rev) .hero svg,body:not(.rev) .script,body:not(.rev) .xv,body:not(.rev
   <p class="foot" id="foot"></p>
 </main>
 
-<script>
+<script type="text/plain" id="app">
 const CFG={nombre:'Dafne',edad:15,fecha:'2027-04-23T19:00',lugar:'Iglesia de Jesucristo de los Santos de los Últimos Días · Salón cultural',direccion:'Av. Pedro Ignacio Muiba (esq.), Trinidad, Beni',mapa:'https://www.google.com/maps/search/?api=1&query=-14.8437247,-64.9042195',vestimenta:'Formal, en tonos lila o blanco',mensaje:'Hoy empieza un capítulo muy especial de mi vida y quiero compartirlo contigo.',url:'https://claude.ai/artifact/96hJtr8fXvGnBjtPydDktZ',tema:'lila',fuente:'elegante',sobre:'si',petalos:'si',fotoLugar2:'',ev2on:'no',t1:'',t2:'',fecha2:'',lugar2:'',direccion2:'',mapa2:'',foto:'',fotoSobre:'',fotoLugar:'',galeria:[],fondos:[],whatsapp:'59168972863',whatsapp2:'59172685867',ticketUrl:'',firma:''};
 const TH={lila:['#1a0b2e','#4a1f86','#c8a2ff','#e9d8ff','#9b5de5','0deg'],rosa:['#2e0b1d','#86204a','#ffa2c8','#ffd8e9','#e5489b','60deg'],azul:['#0b1a2e','#1f4a86','#a2c8ff','#d8e9ff','#4a8de5','-50deg'],dorado:['#241a05','#6b4a12','#ffd27a','#fff0c8','#e5a93a','150deg'],verde:['#0b2e1d','#1f864a','#a2ffc8','#d8ffe9','#3ac27a','-130deg']},FN={elegante:["'Playfair Display',Georgia,serif","'Dancing Script',cursive"],moderna:["'Poppins',system-ui,sans-serif","'Poppins',system-ui,sans-serif"],clasica:["Georgia,'Times New Roman',serif","Georgia,'Times New Roman',serif"],romantica:["'Cormorant Garamond',Georgia,serif","'Great Vibes',cursive"],formal:["Cinzel,Georgia,serif","'Great Vibes',cursive"],minimal:["Montserrat,system-ui,sans-serif","Montserrat,system-ui,sans-serif"],divertida:["Fredoka,system-ui,sans-serif","Pacifico,cursive"],literaria:["Lora,Georgia,serif","Parisienne,cursive"]};
-let LOC=false;try{const s=localStorage.getItem('inv-cfg');if(s){Object.assign(CFG,JSON.parse(s));LOC=true}}catch(e){}
+let LOC=false;if(window.EXT)Object.assign(CFG,window.EXT);else if(!/[?&]admin/.test(location.search))try{const s=localStorage.getItem('inv-cfg');if(s){Object.assign(CFG,JSON.parse(s));LOC=true}}catch(e){}
 (function(){const t=TH[CFG.tema]||TH.lila,f=FN[CFG.fuente]||FN.elegante,s=document.documentElement.style;['--bg','--bg2','--lila','--lila2','--c1','--hue'].forEach((v,i)=>s.setProperty(v,t[i]));s.setProperty('--fh',f[0]);s.setProperty('--fs',f[1])})();
 const GF={romantica:'Cormorant+Garamond:wght@600&family=Great+Vibes',formal:'Cinzel:wght@600&family=Great+Vibes',minimal:'Montserrat:wght@600',divertida:'Fredoka:wght@600&family=Pacifico',literaria:'Lora:wght@600&family=Parisienne'};
 if(GF[CFG.fuente]){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+GF[CFG.fuente]+'&display=swap';document.head.appendChild(l)}
@@ -166,33 +167,48 @@ if(F2){const mk=(t,d,l,a,m,ph)=>{const c=document.createElement('div');c.classNa
   $('#cuando').parentNode.hidden=true;$('#donde').parentNode.hidden=true;
   $('#vest').before(mk(CFG.t1||'Ceremonia',F,CFG.lugar,CFG.direccion,CFG.mapa,CFG.fotoLugar),mk(CFG.t2||'Fiesta de recepción',F2,CFG.lugar2||CFG.lugar,CFG.direccion2||'',CFG.mapa2,CFG.fotoLugar2))}
 if(CFG.ticketUrl){$('#tk').href=CFG.ticketUrl;$('#tk').hidden=false}
-function para(){let g='';try{const h=decodeURIComponent(location.hash.slice(1));if(/^Para-/.test(h))g=h.slice(5).replace(/-/g,' ')}catch(e){}
+function para(){let g='';try{const h=decodeURIComponent(location.hash.slice(1));if(/^Para-/.test(h))g=h.slice(5).replace(/-/g,' ')}catch(e){}const qg=new URLSearchParams(location.search).get('g');if(qg)g=qg;
 $('#para').hidden=!g;$('#to').textContent=g?'Para '+g:'Una invitación especial';if(g){$('#para').textContent='Para '+g;$('#who').value=g;wa()}}
 para();addEventListener('hashchange',para);
 function abrir(){const s=$('#sob');if(s.classList.contains('o'))return;s.classList.add('o');setTimeout(()=>s.classList.add('o2'),350);setTimeout(()=>{s.classList.add('out');document.body.classList.add('rev')},2400);setTimeout(()=>s.remove(),3700)}
 $('#env').onclick=abrir;
 try{if(CFG.sobre==='no'||sessionStorage.getItem('noenv')){sessionStorage.removeItem('noenv');$('#sob').remove();document.body.classList.add('rev')}}catch(e){}
 const SCH=[['Evento',[['tipo','Tipo de evento','select',{xv:'XV años',cumple:'Cumpleaños',boda:'Boda',empresa:'Evento de empresa',navidad:'Cena navideña',promocion:'Promoción / graduación',otro:'Otro evento'}],['nombre','Nombre (festejado, pareja, empresa o evento)'],['subtitulo','Frase bajo el nombre (vacío = automática)'],['edad','Número grande: edad (vacío = ninguno)','number'],['fecha','Fecha y hora','datetime-local'],['lugar','Nombre del lugar'],['direccion','Dirección'],['vestimenta','Vestimenta'],['mensaje','Mensaje','textarea'],['firma','Firma final (vacío = automática)']]],['Segundo evento (ej. fiesta de recepción)',[['ev2on','Mostrar segundo evento','select',{no:'No',si:'Sí'}],['t1','Título del primer evento (ej. Graduación)'],['t2','Título del segundo (ej. Fiesta de recepción)'],['fecha2','Fecha y hora del segundo','datetime-local'],['lugar2','Lugar del segundo'],['direccion2','Dirección del segundo'],['mapa2','Enlace del mapa del segundo']]],['Contacto y enlaces',[['whatsapp','WhatsApp para confirmar (con 591)'],['whatsapp2','WhatsApp para dudas (con 591)'],['ticketUrl','Enlace del ticket QR'],['mapa','Enlace del mapa'],['url','Enlace de esta invitación']]],['Apariencia',[['tema','Colores','select',{lila:'Lila',rosa:'Rosa',azul:'Azul',dorado:'Dorado',verde:'Verde'}],['fuente','Letra','select',{elegante:'Elegante',romantica:'Romántica',formal:'Formal',moderna:'Moderna',minimal:'Minimalista',divertida:'Divertida',clasica:'Clásica',literaria:'Literaria'}],['sobre','Sobre de entrada','select',{si:'Sí',no:'No'}],['petalos','Pétalos que caen','select',{si:'Sí',no:'No'}]]]];
+const DB=()=>new Promise((r,j)=>{const q=indexedDB.open('inv-db',1);q.onupgradeneeded=()=>q.result.createObjectStore('d',{keyPath:'id'});q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)});
+const idb=async(m,v)=>{const d=await DB();return new Promise((r,j)=>{const s=d.transaction('d',m==='all'?'readonly':'readwrite').objectStore('d'),q=m==='all'?s.getAll():m==='put'?s.put(v):s.delete(v);q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)})};
 const PH={};function rz(f,m){return new Promise(r=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k|0;c.height=im.height*k|0;c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);r(c.toDataURL('image/jpeg',.72))};im.src=u})}
 const col=()=>{const o={};SCH.forEach(([t,fs])=>fs.forEach(([k,,ty])=>{const v=$('#f_'+k).value;o[k]=ty==='number'?+v:v}));return Object.assign(o,PH)};
 function adm(){let p=$('#adm');if(p){p.hidden=!p.hidden;return}
   p=document.createElement('div');p.id='adm';
   let h='<div class="ap"><button class="x" id="ax">Cerrar</button><h2>Modo admin</h2><p class="nt">Los cambios se ven solo en este dispositivo hasta que envíes la configuración para publicarla. Las fotos que cargues aquí se ven solo en este dispositivo. Para publicarlas para todos, envíaselas a Claude en el chat.</p>'+(LOC?'<p class="nt">⚠ Estás viendo cambios locales.</p>':'');
+  h+='<h3>Mis diseños</h3><p class="nt">Diseño activo: <b id="act"></b></p><label>Nombre del diseño<input id="dn" type="text" placeholder="Ej. Promoción 2026"></label><div class="bt" style="margin-top:8px"><button class="btn" type="button" id="sv">Guardar diseño</button><label class="btn sec" style="margin:0;width:auto">Cargar archivo<input type="file" id="di" accept=".json,application/json" hidden></label><button class="btn sec" type="button" id="nu">Nuevo en blanco</button></div><div id="dl2"></div>';
   SCH.forEach(([t,fs])=>{h+='<h3>'+t+'</h3>';fs.forEach(([k,l,ty,o])=>{h+='<label>'+l+(ty==='select'?'<select id="f_'+k+'">'+Object.entries(o).map(([v,n])=>'<option value="'+v+'">'+n+'</option>').join('')+'</select>':ty==='textarea'?'<textarea id="f_'+k+'" rows="3"></textarea>':'<input id="f_'+k+'" type="'+(ty||'text')+'">')+'</label>'})});
   h+='<h3>Fotos (vista previa en este dispositivo)</h3><div id="phs"></div>';h+='<h3>Invitados</h3><label>Un nombre por línea (en el enlace se quitan las tildes)<textarea id="gl" rows="5"></textarea></label><button class="btn" id="gb">Crear enlaces</button><div id="gr"></div><h3>Guardar</h3><div class="bt"><button class="btn" id="as">Guardar y ver</button><button class="btn sec" id="ar">Quitar cambios locales</button><button class="btn sec" id="ac">Copiar configuración</button></div><textarea id="cj" rows="6" readonly></textarea></div>';
   p.innerHTML=h;document.body.appendChild(p);
   SCH.forEach(([t,fs])=>fs.forEach(([k])=>{$('#f_'+k).value=CFG[k]??''}));
-  $('#f_url').value=(/claude|anthropic/i.test(location.hostname)||!/^https?:/.test(location.href))?CFG.url:location.href.split('#')[0];
-  [['foto','Retrato principal'],['fotoSobre','Foto de la carta del sobre (si no, usa el retrato)'],['fondos','Foto de fondo'],['galeria','Galería (hasta 6 fotos)'],['fotoLugar','Foto del lugar del primer evento'],['fotoLugar2','Foto del lugar del segundo evento']].forEach(([k,l])=>{PH[k]=CFG[k];const lb=document.createElement('label'),mu=k==='galeria';lb.innerHTML=l+'<input type="file" accept="image/*"'+(mu?' multiple':'')+'><span class="nt"></span>';const st=lb.querySelector('span'),n=()=>{const v=PH[k];st.textContent=Array.isArray(v)?v.length+' foto(s)':v?'1 foto cargada':'Sin foto'};n();lb.querySelector('input').onchange=async e=>{const d=await Promise.all([...e.target.files].slice(0,mu?6:1).map(f=>rz(f,mu?640:k==='fondos'?1100:900)));PH[k]=(mu||k==='fondos')?d:d[0];n()};$('#phs').appendChild(lb)});
+  $('#f_url').value=(/claude|anthropic/i.test(location.hostname)||!/^https?:/.test(location.href))?CFG.url:location.origin+location.pathname;
+  [['foto','Retrato principal'],['fotoSobre','Foto de la carta del sobre (si no, usa el retrato)'],['fondos','Foto de fondo'],['galeria','Galería (hasta 6 fotos)'],['fotoLugar','Foto del lugar del primer evento'],['fotoLugar2','Foto del lugar del segundo evento']].forEach(([k,l])=>{PH[k]=CFG[k];const lb=document.createElement('label'),mu=k==='galeria';lb.innerHTML=l+'<input type="file" accept="image/*"'+(mu?' multiple':'')+'><span class="nt"></span>';const st=lb.querySelector('span'),n=()=>{const v=PH[k],a=Array.isArray(v)?v:(v?[v]:[]);st.innerHTML='';if(!a.length)st.textContent='Sin foto';a.forEach((u,ix)=>{const w=document.createElement('span');w.style.cssText='display:inline-block;position:relative;margin:6px 8px 0 0';w.innerHTML='<img alt="" style="width:56px;height:56px;object-fit:cover;border-radius:8px;display:block"><button type="button" aria-label="Quitar foto" style="position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;border:0;background:#fff;color:#3b1a6b;font-weight:700;cursor:pointer;padding:0">✕</button>';w.querySelector('img').src=u;w.querySelector('button').onclick=ev=>{ev.preventDefault();ev.stopPropagation();if(Array.isArray(v))v.splice(ix,1);else PH[k]='';n()};st.appendChild(w)})};n();lb.querySelector('input').onchange=async e=>{const d=await Promise.all([...e.target.files].slice(0,mu?6:1).map(f=>rz(f,mu?640:k==='fondos'?1100:900)));PH[k]=mu?[...(PH[k]||[]),...d].slice(0,6):k==='fondos'?d:d[0];n();e.target.value=''};$('#phs').appendChild(lb)});
+  try{$('#act').textContent=localStorage.getItem('inv-nom')||'(sin nombre)';$('#dn').value=localStorage.getItem('inv-nom')||''}catch(e){}
+  const bajar=d=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download=(d.nombre||'diseno')+'.json';a.click()};
+  async function lista(){const bx=$('#dl2');bx.innerHTML='';let ar=[];try{ar=await idb('all')}catch(e){bx.textContent='Este navegador no permite guardar diseños.';return}
+    ar.sort((x,y)=>y.fecha-x.fecha).forEach(d=>{const r=document.createElement('div');r.className='gr';r.innerHTML='<b></b><span class="nt"></span><div class="bt"><button class="btn" type="button">Cargar</button><button class="btn sec" type="button">Descargar</button><button class="btn sec" type="button">Eliminar</button></div>';r.querySelector('b').textContent=d.nombre;r.querySelector('.nt').textContent=new Date(d.fecha).toLocaleString('es');const [c,dl,x]=r.querySelectorAll('button');
+      c.onclick=()=>{try{localStorage.setItem('inv-cfg',JSON.stringify(d.cfg));localStorage.setItem('inv-nom',d.nombre);sessionStorage.setItem('noenv','1')}catch(e){}location.reload()};
+      dl.onclick=()=>bajar(d);
+      x.onclick=async()=>{if(x.dataset.s){await idb('del',d.id);lista()}else{x.dataset.s=1;x.textContent='¿Seguro?';setTimeout(()=>{x.dataset.s='';x.textContent='Eliminar'},3000)}};bx.appendChild(r)})}
+  $('#sv').onclick=async()=>{const n=$('#dn').value.trim()||'Mi diseño',id=n.toLowerCase().replace(/[^a-z0-9]+/g,'-')||String(Date.now());try{await idb('put',{id,nombre:n,fecha:Date.now(),cfg:col()});localStorage.setItem('inv-nom',n);$('#act').textContent=n}catch(e){}lista()};
+  $('#di').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(d.cfg){d.id=(d.id||'imp')+'-'+Date.now();d.fecha=Date.now();await idb('put',d);lista()}}catch(er){}e.target.value=''};
+  $('#nu').onclick=()=>{try{localStorage.removeItem('inv-nom')}catch(e){}$('#ar').click()};
+  lista();
   $('#ax').onclick=()=>{p.hidden=true};
-  $('#gb').onclick=()=>{const base=$('#f_url').value.split('#')[0],r=$('#gr');r.innerHTML='';$('#gl').value.split('\n').map(s=>s.trim()).filter(Boolean).forEach(n=>{const s=n.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,''),lk=base+'#Para-'+s,d=document.createElement('div');d.className='gr';d.innerHTML='<b></b><input readonly><a class="btn sec" target="_blank" rel="noopener">Enviar por WhatsApp</a>';d.querySelector('b').textContent=n;const i=d.querySelector('input');i.value=lk;i.onclick=()=>i.select();d.querySelector('a').href='https://wa.me/?text='+encodeURIComponent('Hola '+n+', te invito '+T.a.replace('{n}',$('#f_nombre').value)+' 💜 '+lk);r.appendChild(d)})};
+  $('#gb').onclick=()=>{const base=$('#f_url').value.split('#')[0],r=$('#gr');r.innerHTML='';$('#gl').value.split('\n').map(s=>s.trim()).filter(Boolean).forEach(n=>{const s=n.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,''),lk=SLUG?base+'?e='+SLUG+'&g='+encodeURIComponent(n):base+'#Para-'+s,d=document.createElement('div');d.className='gr';d.innerHTML='<b></b><input readonly><a class="btn sec" target="_blank" rel="noopener">Enviar por WhatsApp</a>';d.querySelector('b').textContent=n;const i=d.querySelector('input');i.value=lk;i.onclick=()=>i.select();d.querySelector('a').href='https://wa.me/?text='+encodeURIComponent('Hola '+n+', te invito '+T.a.replace('{n}',$('#f_nombre').value)+' 💜 '+lk);r.appendChild(d)})};
   $('#as').onclick=()=>{try{localStorage.setItem('inv-cfg',JSON.stringify(col()));sessionStorage.setItem('noenv','1')}catch(e){}location.reload()};
   $('#ar').onclick=()=>{try{localStorage.removeItem('inv-cfg');sessionStorage.setItem('noenv','1')}catch(e){}location.reload()};
   $('#ac').onclick=()=>{const c=$('#cj');c.value=JSON.stringify((({foto,fotoSobre,fotoLugar,fotoLugar2,galeria,fondos,...r})=>r)(col()),null,1);c.select();try{navigator.clipboard.writeText(c.value)}catch(e){}}}
-let rt=[];$('.hero svg').onclick=()=>{const t=Date.now();rt=rt.filter(x=>t-x<2500);rt.push(t);if(rt.length>=5){rt=[];adm()}};
+let rt=[];$('.hero svg').onclick=()=>{const t=Date.now();rt=rt.filter(x=>t-x<2500);rt.push(t);if(rt.length>=5&&!window.EXT){rt=[];adm()}};
 function wa(){const t='Hola, soy '+($('#who').value.trim()||'___')+' y confirmo mi asistencia '+T.a.replace('{n}',CFG.nombre)+' ('+$('#n').value+(+$('#n').value===1?' persona':' personas')+').';
   $('#wa').href='https://wa.me/'+CFG.whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent(t)}
 $('#who').oninput=wa;$('#n').onchange=wa;wa();
+$('#wa').addEventListener('click',()=>{try{if(fdb&&SLUGE)fdb.collection('invitaciones').doc(SLUGE).collection('confirmaciones').add({nombre:$('#who').value.trim()||'(sin nombre)',personas:+$('#n').value,fecha:Date.now()})}catch(e){}});
 $('#wa2').href='https://wa.me/'+CFG.whatsapp2+'?text='+encodeURIComponent('Hola, tengo una consulta sobre '+T.wa.replace('{n}',CFG.nombre)+'.');
 function tick(){const nx=[F,F2].filter(d=>d&&d>new Date())[0];let ms=nx?nx-new Date():0;const z=(id,v)=>$(id).textContent=v;
   z('#d',Math.floor(ms/864e5));z('#h',Math.floor(ms/36e5)%24);z('#m',Math.floor(ms/6e4)%60);z('#s',Math.floor(ms/1e3)%60)}
@@ -200,6 +216,54 @@ tick();setInterval(tick,1000);
 (()=>{if(matchMedia('(prefers-reduced-motion:reduce)').matches||CFG.petalos==='no')return;const c=$('#pt'),x=c.getContext('2d');let W,H;const rs=()=>{W=c.width=innerWidth;H=c.height=innerHeight};rs();addEventListener('resize',rs);
 const P=Array.from({length:26},()=>({x:Math.random()*W,y:Math.random()*H,s:6+Math.random()*9,v:.4+Math.random()*.8,w:Math.random()*6,r:Math.random()*6}));
 (function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.y+=p.v;p.w+=.02;p.x+=Math.sin(p.w)*.6;p.r+=.01;if(p.y>H+20){p.y=-20;p.x=Math.random()*W}x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle='rgba(233,216,255,.5)';x.beginPath();x.ellipse(0,0,p.s,p.s*.55,0,0,7);x.fill();x.restore()});requestAnimationFrame(f)})()})();
+</script>
+<script>
+const FB={apiKey:'AIzaSyASwgqYcF2Ml7IlWtzKtcIMzrLvXPG8CXE',authDomain:'sobreinvitacion.firebaseapp.com',projectId:'sobreinvitacion',appId:'1:152094044468:web:79db8f58914d6e76fbb561'};
+let SLUGE='',SLUG='',fdb=null,fau=null;
+function fotosToCfg(P){const g=[],o={};for(let i=1;i<=6;i++)if(P['g'+i])g.push(P['g'+i]);['foto','fotoSobre','fotoLugar','fotoLugar2'].forEach(k=>{if(P[k])o[k]=P[k]});if(P.fondo)o.fondos=[P.fondo];if(g.length)o.galeria=g;return o}
+function cfgToFotos(c){const P={};['foto','fotoSobre','fotoLugar','fotoLugar2'].forEach(k=>{if(c[k])P[k]=c[k]});if(c.fondos&&c.fondos[0])P.fondo=c.fondos[0];(c.galeria||[]).slice(0,6).forEach((u,i)=>{P['g'+(i+1)]=u});return P}
+(async()=>{
+  const q=new URLSearchParams(location.search),sl=(q.get('e')||'').toLowerCase().replace(/[^a-z0-9-]/g,''),ok=!!window.firebase&&!/PEGA/.test(FB.apiKey);
+  window.EXT=null;
+  if(ok){try{firebase.initializeApp(FB);fdb=firebase.firestore();fau=firebase.auth();
+    if(sl&&!q.has('admin')){document.body.style.visibility='hidden';SLUGE=sl;const r=fdb.collection('invitaciones').doc(sl),[d,fs]=await Promise.all([r.get(),r.collection('fotos').get()]);
+      if(d.exists){const c=d.data().cfg||{},P={};fs.forEach(z=>{P[z.id]=z.data().d});window.EXT=Object.assign(c,fotosToCfg(P))}}}catch(e){console.warn(e)}
+    if(sl&&!q.has('admin')&&!window.EXT){document.body.style.visibility='';document.body.innerHTML='<p style="color:#fff;padding:60px 20px;text-align:center;font-family:sans-serif">No se encontró esta invitación.</p>';return}}
+  const s=document.createElement('script');s.text=document.getElementById('app').textContent;document.body.appendChild(s);
+  document.body.style.visibility='';
+  if(ok&&q.has('admin'))nube();
+})();
+function nube(){
+  const DEF=JSON.parse(JSON.stringify(CFG)),o=document.createElement('div');o.id='dash';o.style.cssText='position:fixed;inset:0;z-index:120;background:#0b0418;overflow:auto;padding:16px';document.body.appendChild(o);
+  const ur=()=>location.origin+location.pathname;
+  function login(){o.innerHTML='<div class="ap"><h2>Panel de invitaciones</h2><label>Correo<input id="lm" type="email"></label><label>Contraseña<input id="lp" type="password"></label><button class="btn" id="lg" type="button" style="margin-top:12px">Entrar</button><p class="nt" id="le"></p></div>';$('#lg').onclick=async()=>{try{await fau.signInWithEmailAndPassword($('#lm').value.trim(),$('#lp').value)}catch(e){$('#le').textContent='No se pudo entrar: '+e.message}}}
+  async function lista(){o.style.display='';o.innerHTML='<div class="ap"><button class="x" id="so" type="button">Salir</button><h2>Mis invitaciones</h2><div class="bt"><button class="btn" id="nv" type="button">Nueva invitación</button></div><div id="il"></div></div>';
+    $('#so').onclick=()=>fau.signOut();$('#nv').onclick=()=>edit(null);const il=$('#il');let sn;
+    try{sn=await fdb.collection('invitaciones').where('owner','==',fau.currentUser.uid).get()}catch(e){il.textContent='Error: '+e.message;return}
+    if(sn.empty)il.textContent='Todavía no hay invitaciones. Crea la primera.';
+    sn.forEach(d=>{const c=d.data().cfg||{},r=document.createElement('div');r.className='gr';r.innerHTML='<b></b><span class="nt"></span><div class="bt"><button class="btn" type="button">Editar</button><a class="btn sec" target="_blank" rel="noopener">Ver</a><button class="btn sec" type="button">Confirmaciones</button><button class="btn sec" type="button">Eliminar</button></div>';
+      r.querySelector('b').textContent=c.nombre||d.id;r.querySelector('.nt').textContent=(c.tipo||'')+' · '+d.id;const [e,v,cf,x]=[...r.querySelectorAll('button,a')];
+      v.href=ur()+'?e='+d.id;e.onclick=()=>edit(d.id);
+      cf.onclick=async()=>{const z=await fdb.collection('invitaciones').doc(d.id).collection('confirmaciones').orderBy('fecha','desc').get();let t=0,h='';z.forEach(y=>{const w=y.data();t+=w.personas||0;h+=w.nombre+' ('+w.personas+')\n'});alert('Confirmados: '+t+' personas\n\n'+h)};
+      x.onclick=async()=>{if(!confirm('¿Eliminar esta invitación y sus fotos?'))return;const ref=fdb.collection('invitaciones').doc(d.id);for(const sc of ['fotos','confirmaciones']){const s=await ref.collection(sc).get();await Promise.all(s.docs.map(y=>y.ref.delete()))}await ref.delete();lista()};il.appendChild(r)})}
+  async function edit(id){let c={};
+    if(id){const r=fdb.collection('invitaciones').doc(id),[d,fs]=await Promise.all([r.get(),r.collection('fotos').get()]),P={};fs.forEach(z=>{P[z.id]=z.data().d});c=Object.assign(d.data().cfg||{},fotosToCfg(P))}
+    Object.keys(CFG).forEach(k=>delete CFG[k]);Object.assign(CFG,JSON.parse(JSON.stringify(DEF)),c);
+    const old=$('#adm');if(old)old.remove();adm();o.style.display='none';
+    const p=$('#adm'),bx=document.createElement('div');SLUG=id||'';
+    bx.innerHTML='<h3>Nube</h3><label>Identificador del enlace (letras, números y guiones)<input id="cl_s" '+(id?'readonly':'')+'></label><div class="bt" style="margin-top:8px"><button class="btn" type="button" id="cl_g">Guardar en la nube</button><button class="btn sec" type="button" id="cl_b">Volver a la lista</button></div><p class="nt" id="cl_m"></p>';
+    p.querySelector('.ap').insertBefore(bx,p.querySelector('.ap h3'));$('#cl_s').value=id||'';
+    $('#cl_s').oninput=()=>{SLUG=$('#cl_s').value.toLowerCase().replace(/[^a-z0-9-]/g,'')};
+    $('#cl_b').onclick=()=>{p.remove();lista()};
+    $('#cl_g').onclick=async()=>{const s=($('#cl_s').value||'').toLowerCase().replace(/[^a-z0-9-]/g,'');if(!s){$('#cl_m').textContent='Escribe un identificador.';return}
+      $('#cl_m').textContent='Guardando...';
+      try{const cc=col(),fo=cfgToFotos(cc),F2={...cc};['foto','fotoSobre','fotoLugar','fotoLugar2','fondos','galeria'].forEach(k=>{delete F2[k]});
+        const r=fdb.collection('invitaciones').doc(s),ex=await r.collection('fotos').get(),b=fdb.batch();
+        b.set(r,{owner:fau.currentUser.uid,cfg:F2,actualizado:Date.now()},{merge:true});
+        ex.forEach(z=>{if(!fo[z.id])b.delete(z.ref)});Object.entries(fo).forEach(([k,u])=>b.set(r.collection('fotos').doc(k),{d:u}));
+        await b.commit();$('#cl_m').textContent='Guardado. Enlace: '+ur()+'?e='+s}catch(e){$('#cl_m').textContent='Error: '+e.message}}}
+  fau.onAuthStateChanged(u=>u?lista():login());
+}
 </script>
 </body>
 </html>

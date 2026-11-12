@@ -226,7 +226,7 @@ let SLUGE='',SLUG='',fdb=null,fau=null;
 function fotosToCfg(P){const g=[],o={};for(let i=1;i<=6;i++)if(P['g'+i])g.push(P['g'+i]);['foto','fotoSobre','fotoLugar','fotoLugar2'].forEach(k=>{if(P[k])o[k]=P[k]});if(P.fondo)o.fondos=[P.fondo];if(g.length)o.galeria=g;return o}
 function cfgToFotos(c){const P={};['foto','fotoSobre','fotoLugar','fotoLugar2'].forEach(k=>{if(c[k])P[k]=c[k]});if(c.fondos&&c.fondos[0])P.fondo=c.fondos[0];(c.galeria||[]).slice(0,6).forEach((u,i)=>{P['g'+(i+1)]=u});return P}
 (async()=>{
-  const q=new URLSearchParams(location.search),sl=(q.get('e')||'').toLowerCase().replace(/[^a-z0-9-]/g,''),ok=!!window.firebase&&!/PEGA/.test(FB.apiKey);
+  const q=new URLSearchParams(location.search),sl=(q.get('e')||(location.pathname.match(/\/evento\/([^/]+)\/?$/)||[])[1]||'').toLowerCase().replace(/[^a-z0-9-]/g,''),ok=!!window.firebase&&!/PEGA/.test(FB.apiKey);
   window.EXT=null;
   if(ok){try{firebase.initializeApp(FB);fdb=firebase.firestore();fau=firebase.auth();
     if(sl&&!q.has('admin')){document.body.style.visibility='hidden';SLUGE=sl;const r=fdb.collection('invitaciones').doc(sl),[d,fs]=await Promise.all([r.get(),r.collection('fotos').get()]);
@@ -264,7 +264,7 @@ function nube(){
         const r=fdb.collection('invitaciones').doc(s),ex=await r.collection('fotos').get(),b=fdb.batch();
         b.set(r,{owner:fau.currentUser.uid,cfg:F2,actualizado:Date.now()},{merge:true});
         ex.forEach(z=>{if(!fo[z.id])b.delete(z.ref)});Object.entries(fo).forEach(([k,u])=>b.set(r.collection('fotos').doc(k),{d:u}));
-        await b.commit();$('#cl_m').textContent='Guardado. Enlace: '+ur()+'?e='+s}catch(e){$('#cl_m').textContent='Error: '+e.message}}}
+        await b.commit();$('#cl_m').textContent='Guardado. Enlace: '+ur()+'?e='+s+'   |   Enlace con forma de carpeta (opcional, requiere 404.html): '+ur()+'evento/'+s}catch(e){$('#cl_m').textContent='Error: '+e.message}}}
   fau.onAuthStateChanged(u=>u?lista():login());
 }
 </script>

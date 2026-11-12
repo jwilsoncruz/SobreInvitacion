@@ -237,7 +237,7 @@ function cfgToFotos(c){const P={};['foto','fotoSobre','fotoLugar','fotoLugar2'].
   if(ok&&q.has('admin'))nube();
 })();
 function nube(){
-  const DEF=JSON.parse(JSON.stringify(CFG)),o=document.createElement('div');o.id='dash';o.style.cssText='position:fixed;inset:0;z-index:120;background:#0b0418;overflow:auto;padding:16px';document.body.appendChild(o);
+  document.title='Panel de invitaciones';const DEF=JSON.parse(JSON.stringify(CFG)),o=document.createElement('div');o.id='dash';o.style.cssText='position:fixed;inset:0;z-index:120;background:#0b0418;overflow:auto;padding:16px';document.body.appendChild(o);
   const ur=()=>location.origin+location.pathname;
   function login(){o.innerHTML='<div class="ap"><h2>Panel de invitaciones</h2><label>Correo<input id="lm" type="email"></label><label>Contraseña<input id="lp" type="password"></label><button class="btn" id="lg" type="button" style="margin-top:12px">Entrar</button><p class="nt" id="le"></p></div>';$('#lg').onclick=async()=>{try{await fau.signInWithEmailAndPassword($('#lm').value.trim(),$('#lp').value)}catch(e){$('#le').textContent='No se pudo entrar: '+e.message}}}
   async function lista(){o.style.display='';o.innerHTML='<div class="ap"><button class="x" id="so" type="button">Salir</button><h2>Mis invitaciones</h2><div class="bt"><button class="btn" id="nv" type="button">Nueva invitación</button></div><div id="il"></div></div>';
@@ -251,10 +251,11 @@ function nube(){
       x.onclick=async()=>{if(!confirm('¿Eliminar esta invitación y sus fotos?'))return;const ref=fdb.collection('invitaciones').doc(d.id);for(const sc of ['fotos','confirmaciones']){const s=await ref.collection(sc).get();await Promise.all(s.docs.map(y=>y.ref.delete()))}await ref.delete();lista()};il.appendChild(r)})}
   async function edit(id){let c={};
     if(id){const r=fdb.collection('invitaciones').doc(id),[d,fs]=await Promise.all([r.get(),r.collection('fotos').get()]),P={};fs.forEach(z=>{P[z.id]=z.data().d});c=Object.assign(d.data().cfg||{},fotosToCfg(P))}
-    Object.keys(CFG).forEach(k=>delete CFG[k]);Object.assign(CFG,JSON.parse(JSON.stringify(DEF)),c);
+    Object.keys(CFG).forEach(k=>delete CFG[k]);Object.assign(CFG,JSON.parse(JSON.stringify(DEF)),c);if(!id)Object.assign(CFG,{nombre:'Nombre',tipo:'otro',edad:0,mensaje:'Escribe aquí tu mensaje',lugar:'Lugar del evento',direccion:'',vestimenta:'',whatsapp:'',whatsapp2:'',ticketUrl:'',firma:'',mapa:'',t1:'',t2:'',subtitulo:''});
     const old=$('#adm');if(old)old.remove();adm();o.style.display='none';
     const p=$('#adm'),bx=document.createElement('div');SLUG=id||'';
     bx.innerHTML='<h3>Nube</h3><label>Identificador del enlace (letras, números y guiones)<input id="cl_s" '+(id?'readonly':'')+'></label><div class="bt" style="margin-top:8px"><button class="btn" type="button" id="cl_g">Guardar en la nube</button><button class="btn sec" type="button" id="cl_b">Volver a la lista</button></div><p class="nt" id="cl_m"></p>';
+    const nt=p.querySelector('.nt');if(nt)nt.textContent='Edita todo lo de abajo (datos, fotos, colores) y, al terminar, pulsa Guardar en la nube. Lo que guardes aquí lo verán tus invitados con tu enlace.';
     p.querySelector('.ap').insertBefore(bx,p.querySelector('.ap h3'));$('#cl_s').value=id||'';
     $('#cl_s').oninput=()=>{SLUG=$('#cl_s').value.toLowerCase().replace(/[^a-z0-9-]/g,'')};
     $('#cl_b').onclick=()=>{p.remove();lista()};

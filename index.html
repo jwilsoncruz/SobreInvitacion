@@ -222,7 +222,7 @@ const P=Array.from({length:26},()=>({x:Math.random()*W,y:Math.random()*H,s:6+Mat
 </script>
 <script>
 const FB={apiKey:'AIzaSyASwgqYcF2Ml7IlWtzKtcIMzrLvXPG8CXE',authDomain:'sobreinvitacion.firebaseapp.com',projectId:'sobreinvitacion',appId:'1:152094044468:web:79db8f58914d6e76fbb561'};
-const VER='1.0.0';
+const VER='1.0.1';
 let SLUGE='',SLUG='',fdb=null,fau=null;
 function fotosToCfg(P){const g=[],o={};for(let i=1;i<=6;i++)if(P['g'+i])g.push(P['g'+i]);['foto','fotoSobre','fotoLugar','fotoLugar2'].forEach(k=>{if(P[k])o[k]=P[k]});if(P.fondo)o.fondos=[P.fondo];if(g.length)o.galeria=g;return o}
 function cfgToFotos(c){const P={};['foto','fotoSobre','fotoLugar','fotoLugar2'].forEach(k=>{if(c[k])P[k]=c[k]});if(c.fondos&&c.fondos[0])P.fondo=c.fondos[0];(c.galeria||[]).slice(0,6).forEach((u,i)=>{P['g'+(i+1)]=u});return P}
@@ -260,6 +260,7 @@ function nube(){
     p.querySelector('.ap').insertBefore(bx,p.querySelector('.ap h3'));$('#cl_s').value=id||'';
     $('#cl_s').oninput=()=>{SLUG=$('#cl_s').value.toLowerCase().replace(/[^a-z0-9-]/g,'')};
     $('#cl_b').onclick=()=>{p.remove();lista()};
+    const b2=document.createElement('button');b2.className='btn';b2.type='button';b2.textContent='Guardar en la nube';b2.style.marginTop='16px';b2.onclick=()=>{$('#cl_g').click();$('#cl_m').scrollIntoView({block:'center'})};p.querySelector('.ap').appendChild(b2);
     $('#cl_g').onclick=async()=>{const s=($('#cl_s').value||'').toLowerCase().replace(/[^a-z0-9-]/g,'');if(!s){$('#cl_m').textContent='Escribe un identificador.';return}
       $('#cl_m').textContent='Guardando...';
       try{const cc=col(),fo=cfgToFotos(cc),F2={...cc};['foto','fotoSobre','fotoLugar','fotoLugar2','fondos','galeria'].forEach(k=>{delete F2[k]});
